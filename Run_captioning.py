@@ -1,36 +1,42 @@
 import os
-import captioning
 import sys
+import captioning
 
+# Check if folder path is provided
 if len(sys.argv) < 2:
-    print("Lỗi: Không cung cấp đường dẫn thư mục.")
-    print("Cách dùng: python3 captioning_script.py /path/to/folder")
+    print("Error: Missing folder path")
+    print("Usage: python3 captioning_script.py /path/to/folder")
     sys.exit(1)
 
-# Thư mục gốc chứa các object
+# Get root folder path from command-line argument
 root_folder = sys.argv[1]
 
-# Load model
+# Verify that root folder exists and is a directory
+if not os.path.isdir(root_folder):
+    print(f"Error: Directory does not exist or is not a directory: {root_folder}")
+    sys.exit(1)
+
+# Load captioning model
 device, model, processor = captioning.load_model()
 
-# Duyệt qua từng thư mục object
+# Iterate through each subfolder in root folder
 for subdir in os.listdir(root_folder):
     subdir_path = os.path.join(root_folder, subdir)
     if not os.path.isdir(subdir_path):
         continue
 
-    # Ảnh ưu tiên: goc_middle_10.jpg trong rendered_images
+    # Preferred image: angle_middle_10.jpg in rendered_images
     preferred_image = os.path.join(subdir_path, 'rendered_images', 'angle_middle_10.jpg')
     image_path = None
 
     if os.path.exists(preferred_image):
         image_path = preferred_image
     else:
-        # Fallback: tìm ảnh .jpg đầu tiên trong thư mục
+        # Fallback: find the first .jpg file in the subfolder
         for file in os.listdir(subdir_path):
             if file.lower().endswith('.jpg'):
                 image_path = os.path.join(subdir_path, file)
-                print(f"Dùng ảnh fallback cho {subdir}: {image_path}")
+                print(f"Using fallback image for {subdir}: {image_path}")
                 break
 
     if image_path:
@@ -39,8 +45,8 @@ for subdir in os.listdir(root_folder):
             caption_file = os.path.join(subdir_path, 'caption.txt')
             with open(caption_file, 'w') as f:
                 f.write(caption)
-            print(f" Đã lưu caption tại: {caption_file}")
+            print(f"Caption saved at: {caption_file}")
         except Exception as e:
-            print(f" Lỗi caption cho {image_path}: {str(e)}")
+            print(f"Error generating caption for {image_path}: {str(e)}")
     else:
-        print(f" Không tìm được ảnh nào cho {subdir}")
+        print(f"No image found for {subdir}")
