@@ -1,0 +1,6 @@
+transformers==4.49.0
+torch
+timm
+einops
+pillow
+accelerate
