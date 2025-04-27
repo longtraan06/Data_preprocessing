@@ -1,5 +1,5 @@
 
-# How to use:
+# Usage:
 ### Install Requirements:
 ```
 pip install -r requirements.txt
