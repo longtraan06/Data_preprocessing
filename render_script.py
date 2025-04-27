@@ -332,16 +332,16 @@ def blend(all_rooms_folder_path):
     object_folders = [folder for folder in base_dir.iterdir() if folder.is_dir()]
     
     # Debug: Print information
-    print(f"Đường dẫn gốc: {base_dir}")
-    print(f"Số thư mục con tìm thấy: {len(object_folders)}")
+    print(f"Root path: {base_dir}")
+    print(f"Number of subfolder found: {len(object_folders)}")
     if object_folders:
-        print(f"Thư mục con: {[str(f) for f in object_folders]}")
+        print(f"Subfolder: {[str(f) for f in object_folders]}")
     else:
-        print("Không tìm thấy thư mục con nào hợp lệ.")
+        print("Cant find any subfolder")
     
     # Check if no folders are found
     if not object_folders:
-        print("Cảnh báo: Không có thư mục con nào để xử lý. Kiểm tra cấu trúc thư mục.")
+        print("Warn: there is no Subfolder. please check again")
         return  # Exit if no folders to process
     
     # Process in batches
